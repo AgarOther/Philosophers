@@ -7,7 +7,8 @@ NAME		= philo
 
 # Sources & Includes
 SRCS		=	srcs/main.c \
-				srcs/ft_atoi.c
+				srcs/ft_atoi.c \
+				srcs/ft_putendl.c
 OBJ_FOLDER	= objs
 INCLUDES	= includes
 
@@ -37,7 +38,7 @@ all :
 	fi
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIB) $(MLX) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	$(EXE_DONE)
 
 $(OBJ_FOLDER)/%.o: srcs/%.c
