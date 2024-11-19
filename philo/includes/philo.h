@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:13:43 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/16 15:29:05 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:25:26 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,36 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <stdbool.h>
-
-typedef struct s_fork	t_fork;
+# include <limits.h>
 
 typedef struct s_philo
 {
-	int		id;
-	int		meals;
-	int		last_meal;
-	t_fork	*left_fork;
-	t_fork	*right_fork;
+	int				id;
+	int				times_ate;
+	int				last_meal;
+	bool			is_alive;
+	pthread_mutex_t	left_fork;
+	pthread_mutex_t	right_fork;
 }				t_philo;
 
-struct s_fork
+typedef struct s_data
 {
-	bool	is_taken;
-	//mutex
-};
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
+	long long		start_time;
+	int				philos_count;
+	int				death_time;
+	int				eat_time;
+	int				sleep_time;
+	int				meals_goal;
+}				t_data;
 
-typedef struct s_round_table
-{
-	t_philo		**philosophers;
-	int			forks;
-	int			death_time;
-	int			eat_time;
-	int			sleep_time;
-	int			eat_amount;
-	long		time_start;
-}			t_round_table;
+// Utility
+int			ft_putendl(char *str, int ret);
+long long	get_time(void);
+long		ft_atol(char *nptr);
 
-int		ft_atoi(char *nptr);
-void	ft_putendl(char *str);
-int		welcome_philosophers(t_round_table *data);
+// Parsing
+t_data		*get_data(int argc, char **argv);
 
 #endif

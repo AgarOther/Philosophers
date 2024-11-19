@@ -6,13 +6,13 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 14:36:24 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/16 14:37:14 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:18:33 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_putendl(char *str)
+int	ft_putendl(char *str, int ret)
 {
 	int	i;
 
@@ -21,4 +21,5 @@ void	ft_putendl(char *str)
 		i++;
 	write(1, str, i);
 	write(1, "\n", 1);
+	return (ret);
 }

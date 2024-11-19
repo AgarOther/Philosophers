@@ -1,29 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   forks.c                                            :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 15:12:31 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/16 15:29:59 by scraeyme         ###   ########.fr       */
+/*   Created: 2024/11/19 12:33:04 by scraeyme          #+#    #+#             */
+/*   Updated: 2024/11/19 13:57:06 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	welcome_philosophers(t_round_table *data)
+long	ft_atol(char *nptr)
 {
-	t_philo	*philosophers;
 	int		i;
+	long	res;
 
-	philosophers = malloc(data->forks * sizeof(t_philo));
-	if (!philosophers)
-		return (0);
-	i = 1;
-	while (i <= data->forks)
+	i = 0;
+	res = 0;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '+' || nptr[i] == '-')
 	{
-		
+		if (nptr[i] == '-')
+			return (0);
+		i++;
 	}
-	return (1);
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		res = res * 10 + nptr[i] - '0';
+		i++;
+	}
+	if (res > INT_MAX)
+		return (0);
+	return (res);
 }
