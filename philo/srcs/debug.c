@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 12:17:40 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/19 15:29:02 by scraeyme         ###   ########.fr       */
+/*   Created: 2024/11/19 14:57:00 by scraeyme          #+#    #+#             */
+/*   Updated: 2024/11/19 15:25:42 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	print_philos(t_data *data)
 {
-	t_data	*data;
+	int		i;
+	t_philo	*philos;
 
-	if (argc < 4 || argc > 6)
-		return (ft_putendl("Error! Please specify between 4-5 arguments.", 1));
-	data = get_data(argc, argv);
-	if (!data)
-		return (ft_putendl("Error! Please specify integer values > 0.", 2));
-	join_all(data);
-	print_philos(data);
-	free_all(data);
+	i = 0;
+	philos = data->philos;
+	while (i < data->philos_count)
+	{
+		printf("Philo ID: %d | Left Fork Address: %p | Right Fork Address: %p\n", i, philos[i].left_fork, philos[i].right_fork);
+		i++;
+	}
 }

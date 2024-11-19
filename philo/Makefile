@@ -11,7 +11,8 @@ SRCS		=	srcs/main.c \
 				srcs/ft_putendl.c \
 				srcs/parsing.c \
 				srcs/utility.c \
-				srcs/philo_free.c
+				srcs/debug.c \
+				srcs/philo_manager.c
 OBJ_FOLDER	= objs
 INCLUDES	= includes
 
