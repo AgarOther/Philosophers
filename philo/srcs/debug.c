@@ -6,11 +6,22 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:57:00 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/19 15:25:42 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:31:21 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	*debug_routine(void *param)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *) param;
+	pthread_mutex_lock(philo->print_lock);
+	printf("I am Philosopher #%d!\n", philo->id);
+	pthread_mutex_unlock(philo->print_lock);
+	return (NULL);
+}
 
 void	print_philos(t_data *data)
 {

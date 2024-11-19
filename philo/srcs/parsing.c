@@ -6,47 +6,37 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 12:25:58 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/19 15:44:02 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:40:44 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*routine(void *param)
-{
-	t_data	*data;
-
-	data = (t_data *) param;
-	pthread_mutex_lock(&data->print_lock);
-	printf("I am a Philosopher!\n");
-	pthread_mutex_unlock(&data->print_lock);
-	return (NULL);
-}
 
 bool	populate_table(t_data **data)
 {
 	int		i;
 	t_data	*tmp;
 
-	i = 0;
+	i = -1;
 	tmp = *data;
-	while (i < tmp->philos_count)
+	while (++i < tmp->philos_count)
 	{
 		if (pthread_mutex_init(&tmp->forks[i], NULL) != 0)
 			return (false);
-		i++;
 	}
-	i = 0;
-	while (i < tmp->philos_count)
+	i = -1;
+	while (++i < tmp->philos_count)
 	{
-		if (pthread_create(&tmp->philos[i].thread, NULL, routine, *data) != 0)
-			return (false);
+		tmp->philos[i].id = i;
 		tmp->philos[i].is_alive = true;
-		tmp->philos[i].last_meal = 0;
+		tmp->philos[i].meals_goal = tmp->meals_goal;
 		tmp->philos[i].times_ate = 0;
 		tmp->philos[i].left_fork = &tmp->forks[(i + 1) % tmp->philos_count];
 		tmp->philos[i].right_fork = &tmp->forks[i];
-		i++;
+		tmp->philos[i].print_lock = &tmp->print_lock;
+		if (pthread_create(&tmp->philos[i].thread, NULL,
+				routine, &tmp->philos[i]))
+			return (false);
 	}
 	return (true);
 }

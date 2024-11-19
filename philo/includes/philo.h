@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:13:43 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/19 15:39:04 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:39:31 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@
 typedef struct s_philo
 {
 	pthread_t		thread;
+	int				id;
 	int				times_ate;
-	int				last_meal;
+	int				meals_goal;
 	bool			is_alive;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*print_lock;
 }				t_philo;
 
 typedef struct s_data
@@ -57,5 +59,9 @@ t_data		*get_data(int argc, char **argv);
 
 // Debug
 void		print_philos(t_data *data);
+void		*debug_routine(void *param);
+
+// Routine
+void		*routine(void *param);
 
 #endif

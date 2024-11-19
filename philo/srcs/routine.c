@@ -1,28 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 12:17:40 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/19 20:44:43 by scraeyme         ###   ########.fr       */
+/*   Created: 2024/11/19 20:19:58 by scraeyme          #+#    #+#             */
+/*   Updated: 2024/11/19 20:42:20 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	print_action(t_philo *philo, char *str)
 {
-	t_data	*data;
+	if (pthread_mutex_lock(philo->print_lock))
+	{
+		//Kill process?
+	}
+	printf(str, philo->id);
+	if (pthread_mutex_unlock(philo->print_lock))
+	{
+		//Kill process?
+	}
+}
 
-	if (argc < 4 || argc > 6)
-		return (ft_putendl("Error! Please specify between 4-5 arguments.", 1));
-	data = get_data(argc, argv);
-	if (!data)
-		return (ft_putendl("Error! Please specify integer values > 0.", 2));
-	print_philos(data);
-	sleep(12);
-	join_all(data);
-	free_all(data);
+void	*routine(void *param)
+{
+	t_philo	*philo;
+	int		i;
+
+	philo = (t_philo *)param;
+	i = -1;
+	while (++i < 5)
+	{
+		sleep(2);
+		print_action(philo, "%d is still alive!\n");
+	}
+	return (NULL);
 }
