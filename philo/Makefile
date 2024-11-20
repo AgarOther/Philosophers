@@ -11,7 +11,6 @@ SRCS		=	srcs/main.c \
 				srcs/ft_putendl.c \
 				srcs/parsing.c \
 				srcs/utility.c \
-				srcs/debug.c \
 				srcs/philo_manager.c \
 				srcs/routine.c
 OBJ_FOLDER	= objs
