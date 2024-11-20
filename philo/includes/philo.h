@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:13:43 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/19 20:39:31 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:33:21 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,25 @@
 # include <stdbool.h>
 # include <limits.h>
 
+typedef struct s_rules
+{
+	long long		start_time;
+	long long		death_time;
+	long long		eat_time;
+	long long		sleep_time;
+	int				meals_goal;
+}				t_rules;
+
+
 typedef struct s_philo
 {
 	pthread_t		thread;
+	t_rules			rules;
 	int				id;
 	int				times_ate;
 	int				meals_goal;
+	long long		start_time;
+	long long		last_meal;
 	bool			is_alive;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
@@ -37,18 +50,15 @@ typedef struct s_data
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_lock;
-	long long		start_time;
 	int				philos_count;
-	int				death_time;
-	int				eat_time;
-	int				sleep_time;
-	int				meals_goal;
+	t_rules			*rules;
 }				t_data;
 
 // Utility
 int			ft_putendl(char *str, int ret);
 long long	get_time(void);
 long		ft_atol(char *nptr);
+bool		time_passed(long long time1, long long time2, long long limit);
 
 // Free
 void		*free_all(t_data *data);
@@ -56,10 +66,6 @@ void		join_all(t_data *data);
 
 // Parsing
 t_data		*get_data(int argc, char **argv);
-
-// Debug
-void		print_philos(t_data *data);
-void		*debug_routine(void *param);
 
 // Routine
 void		*routine(void *param);
