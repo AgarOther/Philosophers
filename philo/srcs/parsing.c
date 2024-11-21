@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 12:25:58 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/20 17:34:26 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:02:03 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,12 @@ static bool	populate_table(t_data **data, int i)
 		tmp->philos[i].id = i + 1;
 		tmp->philos[i].is_alive = true;
 		tmp->philos[i].times_ate = 0;
-		tmp->philos[i].last_meal = 0;
+		tmp->philos[i].last_meal = get_time();
 		tmp->philos[i].left_fork = &tmp->forks[(i + 1) % tmp->philos_count];
 		tmp->philos[i].right_fork = &tmp->forks[i];
 		tmp->philos[i].print_lock = &tmp->print_lock;
 		tmp->philos[i].rules = rules_copy(tmp->rules);
+		tmp->philos[i].data = *data;
 		if (pthread_create(&tmp->philos[i].thread, NULL,
 				routine, &tmp->philos[i]))
 			return (false);

@@ -6,25 +6,48 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:19:58 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/20 17:32:57 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:10:48 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*print_message(t_philo *philo, char *str)
+int	print_message(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(philo->print_lock);
-	printf(str, philo->id);
+	if (philo_died(philo->data))
+		return (0);
+	printf(str, get_time() - philo->rules.start_time, philo->id);
 	pthread_mutex_unlock(philo->print_lock);
-	return (NULL);
+	return (1);
 }
 
-bool	is_dead(t_philo *philo)
+int	philo_eat(t_philo *philo)
 {
-	if (time_passed(get_time(), philo->last_meal, philo->rules.death_time))
-		return (true);
-	return (false);
+	pthread_mutex_lock(philo->left_fork);
+	if (!print_message(philo, TAKE_LEFT_FORK))
+		return (0);
+	pthread_mutex_lock(philo->right_fork);
+	if (is_dead(philo))
+	{
+		print_message(philo, HAS_DIED);
+		philo->is_alive = false;
+		return (0);
+	}
+	if (!print_message(philo, TAKE_RIGHT_FORK))
+		return (0);
+	if (!print_message(philo, IS_EATING))
+		return (0);
+	usleep(philo->rules.eat_time * 1000);
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	if (!print_message(philo, FINISHED_EATING))
+		return (0);
+	if (!print_message(philo, IS_SLEEPING))
+		return (0);
+	usleep(philo->rules.sleep_time * 1000);
+	return (print_message(philo, IS_THINKING));
 }
 
 void	*routine(void *param)
@@ -32,10 +55,11 @@ void	*routine(void *param)
 	t_philo	*philo;
 
 	philo = (t_philo *)param;
+	if (philo->id % 2)
+		usleep(5000);
 	while (1)
 	{
-		if (is_dead(philo))
-			return (print_message(philo, "Philo #%d has died!\n"));
-		usleep(1000);
+		if (!philo_eat(philo))
+			return (NULL);
 	}
 }
