@@ -1,44 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 13:39:24 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 17:49:53 by scraeyme         ###   ########.fr       */
+/*   Created: 2024/11/25 17:03:41 by scraeyme          #+#    #+#             */
+/*   Updated: 2024/11/25 17:57:13 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_sleep(int ms)
+void	*free_mutex(pthread_mutex_t	*forks, int size)
 {
-	usleep(ms * 1000);
-}
-
-int	time_passed(t_philo *philo)
-{
-	return ((get_time() - philo->last_meal) > philo->rules.death_time);
-}
-
-long long	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-void	join_all(t_data *data)
-{
-	int		i;
+	int	i;
 
 	i = 0;
-	while (i < data->rules->philo_count)
+	while (i < size)
 	{
-		if (data->philos[i].thread)
-			pthread_join(data->philos[i].thread, NULL);
+		pthread_mutex_destroy(&forks[i]);
 		i++;
 	}
+	return (NULL);
+}
+
+void	*free_data(t_data *data)
+{
+	free_mutex(data->forks, data->rules->philo_count);
+	free_mutex(data->status_lock, data->rules->philo_count + 1);
+	free(data->rules);
+	free(data->philos);
+	free(data->status_lock);
+	free(data->forks);
+	free(data);
+	return (NULL);
 }

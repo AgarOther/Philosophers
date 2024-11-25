@@ -6,20 +6,24 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:44 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 15:10:37 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:10:35 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	status_main_check(t_data *data)
+void	philoop(t_data *data)
 {
-	int	status;
+	int	i;
+	int	j;
 
-	pthread_mutex_lock(&data->status_lock);
-	status = data->status;
-	pthread_mutex_unlock(&data->status_lock);
-	return (status);
+	i = 0;
+	j = 0;
+	while (!is_philo_dead(&data->philos[i]) && j < data->rules->philo_count)
+	{
+		j = (j + 1) * is_philo_done(&data->philos[i]);
+		i = (i + 1) % data->rules->philo_count;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -28,16 +32,10 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (0);
-	data = set_data(argc, argv);
+	data = get_data(argc, argv);
 	if (!data)
 		return (0);
-	while (!status_main_check(data))
-		usleep(1000);
+	philoop(data);
 	join_all(data);
-	pthread_mutex_destroy(&data->status_lock);
-	pthread_mutex_destroy(&data->print_lock);
-	free(data->rules);
-	free(data->philos);
-	free(data->forks);
-	free(data);
+	free_data(data);
 }
