@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 18:10:25 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:28:42 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_philo
 	int				id;
 	int				is_dead;
 	int				meals;
-	int				last_meal;
+	long long		last_meal;
 	t_rules			rules;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
@@ -75,7 +75,7 @@ t_data		*get_data(int argc, char **argv);
 
 // Routine
 void		*routine(void *param);
-int			is_philo_dead(t_philo *philo);
+int			is_philo_dead(t_philo *philo, int death_message);
 int			is_philo_done(t_philo *philo);
 
 #endif

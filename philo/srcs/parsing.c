@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:53:12 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 17:59:08 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:33:56 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_philo	*get_philos(t_data *data, int i)
 		philos[i].left_fork = &data->forks[(i + 1) % data->rules->philo_count];
 		philos[i].right_fork = &data->forks[i];
 		philos[i].print_lock = &data->print_lock;
-		philos[i].status_lock = &data->status_lock[i + 1];
+		philos[i].status_lock = &data->status_lock[i];
 		if (pthread_create(&philos[i].thread, NULL, routine, &philos[i]))
 			return (NULL);
 		usleep(1000);
