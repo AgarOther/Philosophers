@@ -7,12 +7,10 @@ NAME		= philo
 
 # Sources & Includes
 SRCS		=	srcs/main.c \
-				srcs/ft_atol.c \
-				srcs/ft_putendl.c \
+				srcs/ft_safe_atoi.c \
 				srcs/parsing.c \
-				srcs/utility.c \
-				srcs/philo_manager.c \
-				srcs/routine.c
+				srcs/routine.c \
+				srcs/utils.c
 OBJ_FOLDER	= objs
 INCLUDES	= includes
 

@@ -5,108 +5,94 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 12:25:58 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/21 16:02:03 by scraeyme         ###   ########.fr       */
+/*   Created: 2024/11/25 13:12:44 by scraeyme          #+#    #+#             */
+/*   Updated: 2024/11/25 15:19:41 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_rules	rules_copy(t_rules *rules)
-{
-	t_rules	rulescpy;
-
-	rulescpy.death_time = rules->death_time;
-	rulescpy.eat_time = rules->eat_time;
-	rulescpy.death_time = rules->sleep_time;
-	rulescpy.start_time = rules->start_time;
-	return (rulescpy);
-}
-
-t_rules	*set_rules(int argc, char **argv)
+static t_rules	*get_rules(int argc, char **argv)
 {
 	t_rules	*rules;
 
 	rules = malloc(sizeof(t_rules));
 	if (!rules)
 		return (NULL);
-	rules->death_time = ft_atol(argv[2]);
-	rules->eat_time = ft_atol(argv[3]);
-	rules->sleep_time = ft_atol(argv[4]);
+	rules->philo_count = ft_safe_atoi(argv[1]);
+	rules->death_time = ft_safe_atoi(argv[2]);
+	rules->eat_time = ft_safe_atoi(argv[3]);
+	rules->sleep_time = ft_safe_atoi(argv[4]);
 	if (argc == 6)
-		rules->meals_goal = ft_atol(argv[5]);
+		rules->meal_goal = ft_safe_atoi(argv[5]);
 	else
-		rules->meals_goal = -1;
+		rules->meal_goal = -1;
 	rules->start_time = get_time();
+	if (!rules->philo_count || !rules->death_time || !rules->eat_time
+		|| !rules->sleep_time || !rules->meal_goal)
+		return (NULL);
 	return (rules);
 }
 
-static bool	populate_table(t_data **data, int i)
+int	set_philos(t_data *data, int i)
 {
-	t_data	*tmp;
-
-	tmp = *data;
-	while (++i < tmp->philos_count)
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->rules->philo_count);
+	while (++i < data->rules->philo_count)
 	{
-		if (pthread_mutex_init(&tmp->forks[i], NULL) != 0)
-			return (false);
+		if (!data->forks || pthread_mutex_init(&data->forks[i], NULL))
+			return (0);
 	}
 	i = -1;
-	while (++i < tmp->philos_count)
+	data->forks = data->forks;
+	while (++i < data->rules->philo_count)
 	{
-		tmp->philos[i].id = i + 1;
-		tmp->philos[i].is_alive = true;
-		tmp->philos[i].times_ate = 0;
-		tmp->philos[i].last_meal = get_time();
-		tmp->philos[i].left_fork = &tmp->forks[(i + 1) % tmp->philos_count];
-		tmp->philos[i].right_fork = &tmp->forks[i];
-		tmp->philos[i].print_lock = &tmp->print_lock;
-		tmp->philos[i].rules = rules_copy(tmp->rules);
-		tmp->philos[i].data = *data;
-		if (pthread_create(&tmp->philos[i].thread, NULL,
-				routine, &tmp->philos[i]))
-			return (false);
+		data->philos[i].id = i;
+		data->philos[i].meals = 0;
+		data->philos[i].data = data;
+		data->philos[i].last_eat = data->rules->start_time;
+		data->philos[i].rules = *data->rules;
+		data->philos[i].left_fork = &data->forks[(i + 1)
+			% data->rules->philo_count];
+		data->philos[i].right_fork = &data->forks[i];
+		data->philos[i].print_lock = &data->print_lock;
+		data->philos[i].status_lock = &data->status_lock;
+		if (pthread_create(&data->philos[i].thread, NULL,
+				routine, &data->philos[i]))
+			return (0);
 	}
-	return (true);
+	return (1);
 }
 
-void	*free_all(t_data *data)
+static void	*free_all(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	if (data->philos)
-		free(data->philos);
-	if (data->forks)
-	{
-		while (i < data->philos_count)
-			pthread_mutex_destroy(&data->forks[i++]);
-		free(data->forks);
-	}
 	free(data->rules);
 	free(data);
 	return (NULL);
 }
 
-t_data	*get_data(int argc, char **argv)
+t_data	*set_data(int argc, char **argv)
 {
-	t_data	*data;
 	t_rules	*rules;
+	t_data	*data;
 
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (NULL);
-	rules = set_rules(argc, argv);
+	rules = get_rules(argc, argv);
 	if (!rules)
 		return (NULL);
-	data->philos_count = ft_atol(argv[1]);
-	data->philos = malloc(sizeof(t_philo) * (data->philos_count));
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->philos_count);
+	data = malloc(sizeof(t_data));
+	if (!data)
+	{
+		free(rules);
+		return (NULL);
+	}
 	data->rules = rules;
-	if (!rules->start_time || !data->philos_count || !rules->death_time
-		|| !rules->eat_time || !rules->sleep_time || !rules->meals_goal
-		|| !data->philos || pthread_mutex_init(&data->print_lock, NULL) != 0
-		|| !populate_table(&data, -1))
+	data->philos = malloc(sizeof(t_philo) * rules->philo_count);
+	if (!data->philos)
+		return (NULL);
+	data->status = 0;
+	if (pthread_mutex_init(&data->status_lock, NULL)
+		|| pthread_mutex_init(&data->print_lock, NULL))
+		return (NULL);
+	if (!set_philos(data, -1))
 		return (free_all(data));
 	return (data);
 }
