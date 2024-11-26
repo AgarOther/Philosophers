@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:25:38 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 16:35:23 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:52:23 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	philo_eats(t_philo *philo)
 	}
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
+	usleep(1000);
 	print_message(philo, IS_SLEEPING, 1);
 	philo_sleep(philo->rules.sleep_time);
 	print_message(philo, IS_THINKING, 1);
