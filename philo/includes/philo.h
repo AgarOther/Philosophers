@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 18:28:42 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:30:56 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define IS_SLEEPING "[%lld ms] Philo #%d is sleeping! 💤\n"
 # define IS_THINKING "[%lld ms] Philo #%d is thinking! 💭\n"
 # define HAS_DIED "[%lld ms] Philo #%d died! 💀\n"
+# define ALL_FULL "[%lld ms] All philosophers are full! 🫃\n"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -50,7 +51,7 @@ typedef struct s_philo
 	pthread_mutex_t	*status_lock;
 }				t_philo;
 
-typedef struct	s_data
+typedef struct s_data
 {
 	t_rules			*rules;
 	t_philo			*philos;
@@ -75,7 +76,7 @@ t_data		*get_data(int argc, char **argv);
 
 // Routine
 void		*routine(void *param);
-int			is_philo_dead(t_philo *philo, int death_message);
+int			is_philo_dead(t_philo *philo);
 int			is_philo_done(t_philo *philo);
 
 #endif
