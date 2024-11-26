@@ -6,11 +6,37 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:44 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 13:30:45 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:56:32 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	is_philo_done(t_philo *philo)
+{
+	int	is_done;
+
+	if (philo->rules.meals_goal == -1)
+		return (0);
+	pthread_mutex_lock(philo->status_lock);
+	is_done = philo->rules.meals_goal == philo->meals;
+	pthread_mutex_unlock(philo->status_lock);
+	return (is_done);
+}
+
+int	is_philo_dead(t_philo *philo)
+{
+	int	is_dead;
+
+	pthread_mutex_lock(philo->status_lock);
+	if (philo->is_dead != 2)
+		philo->is_dead = time_passed(philo);
+	is_dead = philo->is_dead;
+	if (is_dead == 1)
+		print_message(philo, HAS_DIED, 0);
+	pthread_mutex_unlock(philo->status_lock);
+	return (is_dead);
+}
 
 void	philoop(t_data *data)
 {

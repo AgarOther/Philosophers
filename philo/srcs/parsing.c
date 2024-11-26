@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:53:12 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 18:33:56 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:17:57 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ t_philo	*get_philos(t_data *data, int i)
 		philos[i].status_lock = &data->status_lock[i];
 		if (pthread_create(&philos[i].thread, NULL, routine, &philos[i]))
 			return (NULL);
-		usleep(1000);
 		i++;
 	}
 	return (philos);

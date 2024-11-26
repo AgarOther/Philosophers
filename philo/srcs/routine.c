@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:25:38 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 13:28:15 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:09:18 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,12 @@ void	print_message(t_philo *philo, char *str, int check)
 	pthread_mutex_unlock(philo->print_lock);
 }
 
-int	is_philo_done(t_philo *philo)
+void	philo_finished_eating(t_philo *philo)
 {
-	int	is_done;
-
-	if (philo->rules.meals_goal == -1)
-		return (0);
 	pthread_mutex_lock(philo->status_lock);
-	is_done = philo->rules.meals_goal == philo->meals;
+	philo->meals++;
+	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->status_lock);
-	return (is_done);
-}
-
-int	is_philo_dead(t_philo *philo)
-{
-	int	is_dead;
-
-	pthread_mutex_lock(philo->status_lock);
-	if (philo->is_dead != 2)
-		philo->is_dead = time_passed(philo);
-	is_dead = philo->is_dead;
-	if (is_dead == 1)
-		print_message(philo, HAS_DIED, 0);
-	pthread_mutex_unlock(philo->status_lock);
-	return (is_dead);
 }
 
 int	philo_eats(t_philo *philo)
@@ -57,23 +39,22 @@ int	philo_eats(t_philo *philo)
 	pthread_mutex_lock(philo->right_fork);
 	if (is_philo_done(philo) || is_philo_dead(philo))
 	{
-		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
 		return (0);
 	}
 	print_message(philo, TAKE_RIGHT_FORK, 1);
 	print_message(philo, IS_EATING, 1);
 	philo_sleep(philo->rules.eat_time);
-	philo->meals++;
-	philo->last_meal = get_time();
+	philo_finished_eating(philo);
 	if (is_philo_done(philo))
 	{
-		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
 		return (0);
 	}
-	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 	print_message(philo, IS_SLEEPING, 1);
 	philo_sleep(philo->rules.sleep_time);
 	print_message(philo, IS_THINKING, 1);

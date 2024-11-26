@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 13:30:56 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:57:05 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ t_data		*get_data(int argc, char **argv);
 void		*routine(void *param);
 int			is_philo_dead(t_philo *philo);
 int			is_philo_done(t_philo *philo);
+void		print_message(t_philo *philo, char *str, int check);
 
 #endif
