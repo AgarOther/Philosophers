@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:44 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 13:56:32 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:38:30 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ void	philoop(t_data *data)
 	}
 	i = 0;
 	if (j == data->rules->philo_count)
-	{
 		printf(ALL_FULL, get_time() - data->rules->start_time);
-	}
 	while (i < data->rules->philo_count)
 	{
 		pthread_mutex_lock(data->philos[i].status_lock);
