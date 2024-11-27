@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:25:38 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 09:17:13 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:28:28 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	lock_forks(t_philo *philo)
 
 void	print_message(t_philo *philo, char *str, int check)
 {
+	usleep(1000);
 	pthread_mutex_lock(philo->print_lock);
 	if (check && is_philo_dead(philo))
 	{
@@ -60,7 +61,11 @@ int	philo_eats(t_philo *philo)
 	if (!lock_forks(philo))
 		return (0);
 	print_message(philo, IS_EATING, 1);
-	philo_sleep(philo->rules.eat_time);
+	if (!philo_sleep(philo, philo->rules.eat_time))
+	{
+		unlock_forks(philo);
+		return (0);
+	}
 	philo_finished_eating(philo);
 	if (is_philo_done(philo))
 	{
@@ -71,7 +76,8 @@ int	philo_eats(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	usleep(1000);
 	print_message(philo, IS_SLEEPING, 1);
-	philo_sleep(philo->rules.sleep_time);
+	if (!philo_sleep(philo, philo->rules.sleep_time))
+		return (0);
 	print_message(philo, IS_THINKING, 1);
 	return (1);
 }
@@ -84,7 +90,7 @@ void	*routine(void *param)
 	if (philo->rules.philo_count == 1)
 	{
 		print_message(philo, TAKE_LEFT_FORK, 0);
-		philo_sleep(philo->rules.death_time);
+		usleep(philo->rules.death_time * 1000);
 		return (NULL);
 	}
 	if (philo->id % 2)

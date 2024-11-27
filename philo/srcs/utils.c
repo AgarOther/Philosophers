@@ -6,15 +6,25 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:39:24 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 16:17:24 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:29:55 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_sleep(int ms)
+int	philo_sleep(t_philo *philo, int ms)
 {
-	usleep(ms * 1000);
+	int	i;
+
+	i = 0;
+	while (i < ms)
+	{
+		if (is_philo_dead(philo))
+			return (0);
+		usleep(50 * 1000);
+		i += 50;
+	}
+	return (1);
 }
 
 int	time_passed(t_philo *philo)

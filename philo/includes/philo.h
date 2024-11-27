@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 09:15:16 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:25:17 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_data
 }				t_data;
 
 // Utils
-void		philo_sleep(int ms);
+int			philo_sleep(t_philo *philo, int ms);
 int			ft_safe_atoi(const char *nptr);
 int			time_passed(t_philo *philo);
 long long	get_time(void);
