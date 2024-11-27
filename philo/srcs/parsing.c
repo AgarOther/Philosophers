@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:53:12 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 19:01:49 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/28 00:45:20 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,20 @@ t_philo	*get_philos(t_data *data, int i)
 	return (philos);
 }
 
+static void	warning_check(t_rules *rules)
+{
+	if (rules->philo_count == 1)
+		warn_user(1, rules);
+	else if (rules->death_time < 60)
+		warn_user(2, rules);
+	else if (rules->eat_time < 60)
+		warn_user(3, rules);
+	else if (rules->sleep_time < 60)
+		warn_user(4, rules);
+	if (rules->philo_count > 200)
+		warn_user(5, rules);
+}
+
 t_data	*get_data(int argc, char **argv)
 {
 	t_data	*data;
@@ -101,6 +115,7 @@ t_data	*get_data(int argc, char **argv)
 		free(data);
 		return (NULL);
 	}
+	warning_check(data->rules);
 	data->forks = get_mutex(data->rules->philo_count);
 	if (!data->forks || pthread_mutex_init(&data->print_lock, NULL))
 	{

@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 18:36:25 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/28 00:35:49 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int			unlock_forks(t_philo *philo);
 
 // Parsing
 t_data		*get_data(int argc, char **argv);
+void		warn_user(int warn_code, t_rules *rules);
 
 // Routine
 void		*routine(void *param);
