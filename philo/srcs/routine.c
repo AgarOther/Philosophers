@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:25:38 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 18:36:29 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:13:48 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	*routine(void *param)
 	if (philo->rules.philo_count == 1)
 	{
 		print_message(philo, TAKE_LEFT_FORK, 0);
-		usleep(philo->rules.death_time * 1000);
+		print_message(philo, HAS_DIED, 0);
+		pthread_mutex_lock(philo->status_lock);
+		philo->is_dead = 2;
+		pthread_mutex_unlock(philo->status_lock);
 		return (NULL);
 	}
 	if (philo->id % 2)

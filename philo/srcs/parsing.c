@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:53:12 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 14:17:57 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:01:49 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_rules	*get_rules(int argc, char **argv)
 		|| !rules->sleep_time || !rules->meals_goal || !rules->start_time)
 	{
 		free(rules);
+		printf("\033[31;1mInvalid arguments.\033[0m\n");
 		return (NULL);
 	}
 	return (rules);

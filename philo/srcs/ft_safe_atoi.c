@@ -6,13 +6,13 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:13:37 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/25 13:15:49 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:59:24 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_strlen(const char *str)
+static int	ft_strlen(const char *str)
 {
 	int	i;
 
@@ -22,12 +22,26 @@ int	ft_strlen(const char *str)
 	return (i);
 }
 
+static int	is_digit(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	ft_safe_atoi(const char *nptr)
 {
 	int		i;
 	long	res;
 
-	if (ft_strlen(nptr) > 12)
+	if (ft_strlen(nptr) > 12 || !is_digit(nptr))
 		return (0);
 	i = 0;
 	res = 0;

@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:44 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 18:34:24 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:01:53 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ int	main(int argc, char **argv)
 	t_data	*data;
 
 	if (argc < 5 || argc > 6)
+	{
+		printf("\033[31;1mYou need either 4 or 5 arguments.\033[0m\n");
 		return (0);
+	}
 	data = get_data(argc, argv);
 	if (!data)
 		return (0);
