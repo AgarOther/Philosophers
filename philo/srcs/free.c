@@ -6,16 +6,17 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:03:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 16:17:30 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 09:17:02 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	unlock_forks(t_philo *philo)
+int	unlock_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	return (0);
 }
 
 void	*free_mutex(pthread_mutex_t	*forks, int size)

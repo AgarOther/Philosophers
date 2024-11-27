@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:44 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 16:50:21 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 09:18:17 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	is_philo_dead(t_philo *philo)
 	if (philo->is_dead != 2)
 		philo->is_dead = time_passed(philo);
 	is_dead = philo->is_dead;
+	pthread_mutex_unlock(philo->status_lock);
 	if (is_dead == 1)
 		print_message(philo, HAS_DIED, 0);
-	pthread_mutex_unlock(philo->status_lock);
 	return (is_dead);
 }
 

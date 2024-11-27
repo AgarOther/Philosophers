@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/26 16:35:03 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 09:15:16 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void		join_all(t_data *data);
 // Free
 void		*free_mutex(pthread_mutex_t	*forks, int size);
 void		*free_data(t_data *data);
-void		unlock_forks(t_philo *philo);
+int			unlock_forks(t_philo *philo);
 
 // Parsing
 t_data		*get_data(int argc, char **argv);
