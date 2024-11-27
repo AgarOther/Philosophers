@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:25:38 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 12:28:28 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:39:31 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	lock_forks(t_philo *philo)
 {
+	
 	if (philo->id % 2)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -37,7 +38,6 @@ static int	lock_forks(t_philo *philo)
 
 void	print_message(t_philo *philo, char *str, int check)
 {
-	usleep(1000);
 	pthread_mutex_lock(philo->print_lock);
 	if (check && is_philo_dead(philo))
 	{
@@ -62,16 +62,12 @@ int	philo_eats(t_philo *philo)
 		return (0);
 	print_message(philo, IS_EATING, 1);
 	if (!philo_sleep(philo, philo->rules.eat_time))
-	{
-		unlock_forks(philo);
-		return (0);
-	}
+		return (unlock_forks(philo));
+	if (is_philo_dead(philo))
+		return (unlock_forks(philo));
 	philo_finished_eating(philo);
 	if (is_philo_done(philo))
-	{
-		unlock_forks(philo);
-		return (0);
-	}
+		return (unlock_forks(philo));
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 	usleep(1000);

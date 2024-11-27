@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:39:24 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 12:29:55 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:16:36 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int	philo_sleep(t_philo *philo, int ms)
 	i = 0;
 	while (i < ms)
 	{
-		if (is_philo_dead(philo))
-			return (0);
 		usleep(50 * 1000);
 		i += 50;
+		if (is_philo_dead(philo))
+			return (0);
 	}
 	return (1);
 }

@@ -6,14 +6,14 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 12:25:17 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:40:34 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-# define TAKE_LEFT_FORK "[%lld ms] Philo #%d has taken their left fork! 🍴\n"
-# define TAKE_RIGHT_FORK "[%lld ms] Philo #%d has taken their right fork! 🍴\n"
+# define TAKE_LEFT_FORK "[%lld ms] Philo #%d has taken their left fork! 🔱\n"
+# define TAKE_RIGHT_FORK "[%lld ms] Philo #%d has taken their right fork! 🔱\n"
 # define IS_EATING "[%lld ms] Philo #%d is eating! 🍝\n"
 # define FINISHED_EATING "[%lld ms] Philo #%d has finished eating! 🍽️\n"
 # define IS_SLEEPING "[%lld ms] Philo #%d is sleeping! 💤\n"
