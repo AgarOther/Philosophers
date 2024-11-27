@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:25:38 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/27 13:39:31 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:36:29 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	lock_forks(t_philo *philo)
 {
-	
 	if (philo->id % 2)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -48,14 +47,6 @@ void	print_message(t_philo *philo, char *str, int check)
 	pthread_mutex_unlock(philo->print_lock);
 }
 
-void	philo_finished_eating(t_philo *philo)
-{
-	pthread_mutex_lock(philo->status_lock);
-	philo->meals++;
-	philo->last_meal = get_time();
-	pthread_mutex_unlock(philo->status_lock);
-}
-
 int	philo_eats(t_philo *philo)
 {
 	if (!lock_forks(philo))
@@ -63,10 +54,11 @@ int	philo_eats(t_philo *philo)
 	print_message(philo, IS_EATING, 1);
 	if (!philo_sleep(philo, philo->rules.eat_time))
 		return (unlock_forks(philo));
-	if (is_philo_dead(philo))
-		return (unlock_forks(philo));
-	philo_finished_eating(philo);
-	if (is_philo_done(philo))
+	pthread_mutex_lock(philo->status_lock);
+	philo->meals++;
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(philo->status_lock);
+	if (is_philo_done(philo) || is_philo_dead(philo))
 		return (unlock_forks(philo));
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
@@ -93,7 +85,7 @@ void	*routine(void *param)
 		usleep(15000);
 	while (1)
 	{
-		if (is_philo_dead(philo) || !philo_eats(philo))
+		if (!philo_eats(philo) || is_philo_dead(philo))
 			break ;
 	}
 	return (NULL);
