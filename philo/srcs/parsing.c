@@ -6,13 +6,13 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:53:12 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/28 00:45:20 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/28 12:55:04 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_rules	*get_rules(int argc, char **argv)
+static t_rules	*get_rules(int argc, char **argv)
 {
 	t_rules	*rules;
 
@@ -38,7 +38,7 @@ t_rules	*get_rules(int argc, char **argv)
 	return (rules);
 }
 
-pthread_mutex_t	*get_mutex(int n)
+static pthread_mutex_t	*get_mutex(int n)
 {
 	int				i;
 	pthread_mutex_t	*mutex;
@@ -60,7 +60,7 @@ pthread_mutex_t	*get_mutex(int n)
 	return (mutex);
 }
 
-t_philo	*get_philos(t_data *data, int i)
+static t_philo	*get_philos(t_data *data, int i)
 {
 	t_philo	*philos;
 
