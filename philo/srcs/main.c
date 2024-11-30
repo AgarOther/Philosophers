@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:44 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/28 12:53:36 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/30 13:47:18 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	philoop(t_data *data, int i, int j, int announce)
 		i = (i + 1) % data->rules->philo_count;
 		usleep(50);
 	}
+	pthread_mutex_lock(&data->print_lock);
 	i = -1;
 	if (j == data->rules->philo_count)
 		printf(ALL_FULL, get_time() - data->rules->start_time);
@@ -51,17 +52,13 @@ void	philoop(t_data *data, int i, int j, int announce)
 	{
 		pthread_mutex_lock(data->philos[i].status_lock);
 		if (!announce && data->philos[i].is_dead == 1)
-			announce = 1;
+			announce = data->philos[i].id;
 		data->philos[i].is_dead = 2;
 		pthread_mutex_unlock(data->philos[i].status_lock);
-		if (announce == 1)
-		{
-			print_message(&data->philos[i], HAS_DIED, 0);
-			announce = 2;
-			pthread_mutex_lock(&data->print_lock);
-		}
 	}
 	pthread_mutex_unlock(&data->print_lock);
+	if (announce)
+		print_message(&data->philos[announce - 1], HAS_DIED, 0);
 }
 
 int	main(int argc, char **argv)
