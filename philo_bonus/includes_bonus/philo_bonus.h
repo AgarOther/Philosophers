@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2026/02/27 11:04:37 by scraeyme         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:10:36 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 # define TAKE_LEFT_FORK "[%lld ms] Philo #%d has taken their left fork! 🔱\n"
 # define TAKE_RIGHT_FORK "[%lld ms] Philo #%d has taken their right fork! 🔱\n"
 # define IS_EATING "[%lld ms] Philo #%d is eating! 🍝\n"

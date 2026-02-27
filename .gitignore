@@ -2,3 +2,5 @@ philo/philo
 *.o
 philo/objs/
 .vscode
+philo_bonus/objs/
+philo_bonus/philo_bonus

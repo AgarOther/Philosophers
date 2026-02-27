@@ -1,20 +1,19 @@
 # Compilation
 CC					=	cc
-CFLAGS				=	-Wall -Wextra -Werror -g
+CFLAGS				=	-Wall -Wextra -Werror
 
 # Names
-NAME				=	philo
+NAME				=	philo_bonus
 
 # Sources & Includes
-SRCS				=	srcs/main.c \
-						srcs/free.c \
-						srcs/ft_safe_atoi.c \
-						srcs/parsing.c \
-						srcs/utils.c \
-						srcs/routine.c \
-						srcs/warning.c
+SRCS				=	srcs_bonus/main_bonus.c \
+						srcs_bonus/free_bonus.c \
+						srcs_bonus/ft_safe_atoi_bonus.c \
+						srcs_bonus/parsing_bonus.c \
+						srcs_bonus/utils_bonus.c \
+						srcs_bonus/routine_bonus.c
 OBJ_FOLDER			=	objs
-INCLUDES			=	-I includes
+INCLUDES			=	-I includes_bonus
 
 # Objects
 OBJS				=	$(patsubst %.c, $(OBJ_FOLDER)/%.o, $(SRCS))
@@ -34,7 +33,9 @@ ALL_FCLEAN			=	@echo "🧹$(LIGHT_GREEN) Project's objects & Executables cleaned
 
 # Rules
 
-all :$(NAME)
+all : $(NAME)
+
+bonus : all
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
@@ -56,4 +57,3 @@ fclean :
 re : fclean all
 
 .PHONY: all clean fclean re
-
