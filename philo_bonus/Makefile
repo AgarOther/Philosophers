@@ -11,7 +11,8 @@ SRCS				=	srcs_bonus/main_bonus.c \
 						srcs_bonus/ft_safe_atoi_bonus.c \
 						srcs_bonus/parsing_bonus.c \
 						srcs_bonus/utils_bonus.c \
-						srcs_bonus/routine_bonus.c
+						srcs_bonus/routine_bonus.c \
+						srcs_bonus/warning_bonus.c
 OBJ_FOLDER			=	objs
 INCLUDES			=	-I includes_bonus
 

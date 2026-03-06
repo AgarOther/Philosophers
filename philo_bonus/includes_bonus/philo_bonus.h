@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2026/02/27 11:10:36 by scraeyme         ###   ########.fr       */
+/*   Updated: 2026/02/27 12:08:36 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@
 # define IS_SLEEPING "[%lld ms] Philo #%d is sleeping! 💤\n"
 # define IS_THINKING "[%lld ms] Philo #%d is thinking! 💭\n"
 # define HAS_DIED "[%lld ms] Philo #%d died! 💀\n"
-# define ALL_FULL "[%lld ms] All philosophers are full! 🫃\n"
+# define ALL_FULL "[%lld ms] Philo #%d is full! 🫃\n"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
 # include <limits.h>
+# include <semaphore.h>
+# include <fcntl.h>
 
 typedef struct s_rules
 {
@@ -45,20 +47,18 @@ typedef struct s_philo
 	int				meals;
 	long long		last_meal;
 	t_rules			rules;
-	pthread_t		thread;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*print_lock;
-	pthread_mutex_t	*status_lock;
+	pid_t			pid;
+	sem_t			*forks;
+	sem_t			*sem_print;
 }				t_philo;
 
 typedef struct s_data
 {
 	t_rules			rules;
 	t_philo			*philos;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*status_lock;
-	pthread_mutex_t	print_lock;
+	sem_t			*forks;
+	sem_t			*sem_print;
+	sem_t			*sem_status;
 }				t_data;
 
 typedef enum e_warning_reason
@@ -72,8 +72,7 @@ typedef enum e_warning_reason
 
 // Free
 void			free_mutex(pthread_mutex_t	*forks, int size);
-void			*free_data(t_data *data);
-int				unlock_forks(t_philo *philo);
+void			free_data(t_data *data);
 
 // Parsing
 t_data			get_data(int argc, char **argv);
@@ -81,7 +80,7 @@ pthread_mutex_t	*get_mutex(int n);
 void			get_philos(t_data *data, int *i);
 
 // Routine
-void			*routine(void *param);
+void			routine(t_philo *param);
 int				is_philo_dead(t_philo *philo);
 int				is_philo_done(t_philo *philo);
 void			print_message(t_philo *philo, char *str, int check);

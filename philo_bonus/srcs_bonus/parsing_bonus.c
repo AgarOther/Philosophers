@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:53:12 by scraeyme          #+#    #+#             */
-/*   Updated: 2026/02/27 11:10:30 by scraeyme         ###   ########.fr       */
+/*   Updated: 2026/02/27 12:08:12 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,34 +36,10 @@ static t_rules	get_rules(int argc, char **argv)
 	return (rules);
 }
 
-pthread_mutex_t	*get_mutex(int n)
-{
-	int				i;
-	pthread_mutex_t	*mutex;
-
-	i = 0;
-	mutex = malloc(sizeof(pthread_mutex_t) * n);
-	if (!mutex)
-		return (NULL);
-	while (i < n)
-	{
-		if (pthread_mutex_init(&mutex[i], NULL))
-		{
-			free_mutex(mutex, i);
-			return (NULL);
-		}
-		i++;
-	}
-	return (mutex);
-}
-
 void	get_philos(t_data *data, int *i)
 {
 	data->philos = malloc(sizeof(t_philo) * data->rules.philo_count);
 	if (!data->philos)
-		return ;
-	data->status_lock = get_mutex(data->rules.philo_count + 1);
-	if (!data->status_lock)
 		return ;
 	while (*i < data->rules.philo_count)
 	{
@@ -72,14 +48,19 @@ void	get_philos(t_data *data, int *i)
 		data->philos[*i].meals = 0;
 		data->philos[*i].last_meal = get_time();
 		data->philos[*i].rules = data->rules;
-		data->philos[*i].left_fork = &data->forks[(*i + 1)
-			% data->rules.philo_count];
-		data->philos[*i].right_fork = &data->forks[*i];
-		data->philos[*i].print_lock = &data->print_lock;
-		data->philos[*i].status_lock = &data->status_lock[*i];
-		if (pthread_create(&data->philos[*i].thread, NULL,
-				routine, &data->philos[*i]))
-			return ;
+		data->philos[*i].forks = data->forks;
+		data->philos[*i].sem_print = data->sem_print;
+		data->philos[*i].pid = fork();
+		if (data->philos[*i].pid == 0)
+		{
+			routine(&data->philos[*i]);
+			if (data->philos[*i].meals != data->rules.meals_goal)
+				print_message(&data->philos[*i], HAS_DIED, 0);
+			else
+				print_message(&data->philos[*i], ALL_FULL, 0);
+			free_data(data);
+			exit(0);
+		}
 		*i += 1;
 	}
 }
@@ -91,6 +72,16 @@ t_data	get_data(int argc, char **argv)
 	data.rules = get_rules(argc, argv);
 	if (data.rules.error)
 		return (data);
+	sem_unlink("/forks");
+	data.forks = sem_open("/forks", O_CREAT | O_EXCL, O_RDWR, data.rules.philo_count);
+	sem_unlink("/sem_print");
+	data.sem_print = sem_open("/sem_print", O_CREAT | O_EXCL, O_RDWR, 1);
+	if (data.forks == SEM_FAILED || data.sem_print == SEM_FAILED)
+	{
+		printf("\033[31;1mError opening semaphores.\033[0m\n");
+		data.rules.error = 1;
+		return (data);
+	}
 	warning_check(data.rules);
 	data.rules.start_time = get_time();
 	return (data);

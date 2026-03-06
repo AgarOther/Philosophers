@@ -6,41 +6,34 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 17:03:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2026/02/27 11:10:26 by scraeyme         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:57:14 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <sys/wait.h>
 
-int	unlock_forks(t_philo *philo)
-{
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
-	return (0);
-}
-
-void	free_mutex(pthread_mutex_t	*forks, int size)
+void	join_all(t_data *data)
 {
 	int	i;
 
-	if (!forks)
-		return ;
 	i = 0;
-	while (i < size)
+	while (i < data->rules.philo_count)
 	{
-		pthread_mutex_destroy(&forks[i]);
+		waitpid(data->philos->pid, 0, 0);
 		i++;
 	}
-	free(forks);
-	return ;
 }
 
-void	*free_data(t_data *data)
+void	free_data(t_data *data)
 {
 	if (data->philos)
-		free_mutex(data->status_lock, data->rules.philo_count);
-	free_mutex(data->forks, data->rules.philo_count);
-	pthread_mutex_destroy(&data->print_lock);
+	{
+		sem_close(data->forks);
+		sem_unlink("/forks");
+		sem_close(data->sem_print);
+		sem_unlink("/sem_print");
+	}
 	free(data->philos);
-	return (NULL);
+	return ;
 }

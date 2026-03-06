@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:39:24 by scraeyme          #+#    #+#             */
-/*   Updated: 2026/02/27 11:10:32 by scraeyme         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:15:48 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,3 @@ long long	get_time(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	join_all(t_data *data)
-{
-	int		i;
-
-	i = 0;
-	while (i < data->rules.philo_count)
-	{
-		if (data->philos[i].thread)
-			pthread_join(data->philos[i].thread, NULL);
-		i++;
-	}
-}

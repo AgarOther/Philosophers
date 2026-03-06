@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:06:14 by scraeyme          #+#    #+#             */
-/*   Updated: 2026/02/27 11:04:37 by scraeyme         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:25:16 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef enum e_warning_reason
 
 // Free
 void			free_mutex(pthread_mutex_t	*forks, int size);
-void			*free_data(t_data *data);
+void			free_data(t_data *data);
 int				unlock_forks(t_philo *philo);
 
 // Parsing
