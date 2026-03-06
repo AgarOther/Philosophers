@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <semaphore.h>
 
 static t_rules	get_rules(int argc, char **argv)
 {
@@ -46,18 +47,15 @@ void	get_philos(t_data *data, int *i)
 		data->philos[*i].id = *i + 1;
 		data->philos[*i].is_dead = 0;
 		data->philos[*i].meals = 0;
-		data->philos[*i].last_meal = get_time();
 		data->philos[*i].rules = data->rules;
 		data->philos[*i].forks = data->forks;
 		data->philos[*i].sem_print = data->sem_print;
+		data->philos[*i].sem_death = data->sem_death;
+		data->philos[*i].sem_end = data->sem_end;
 		data->philos[*i].pid = fork();
 		if (data->philos[*i].pid == 0)
 		{
 			routine(&data->philos[*i]);
-			if (data->philos[*i].meals != data->rules.meals_goal)
-				print_message(&data->philos[*i], HAS_DIED, 0);
-			else
-				print_message(&data->philos[*i], ALL_FULL, 0);
 			free_data(data);
 			exit(0);
 		}
@@ -73,10 +71,16 @@ t_data	get_data(int argc, char **argv)
 	if (data.rules.error)
 		return (data);
 	sem_unlink("/forks");
-	data.forks = sem_open("/forks", O_CREAT | O_EXCL, O_RDWR, data.rules.philo_count);
+	data.forks = sem_open("/forks", O_CREAT | O_EXCL, O_RDWR,
+			data.rules.philo_count);
 	sem_unlink("/sem_print");
 	data.sem_print = sem_open("/sem_print", O_CREAT | O_EXCL, O_RDWR, 1);
-	if (data.forks == SEM_FAILED || data.sem_print == SEM_FAILED)
+	sem_unlink("/sem_death");
+	data.sem_death = sem_open("/sem_death", O_CREAT | O_EXCL, O_RDWR, 0);
+	sem_unlink("/sem_end");
+	data.sem_end = sem_open("/sem_end", O_CREAT | O_EXCL, O_RDWR, 0);
+	if (data.forks == SEM_FAILED || data.sem_print == SEM_FAILED
+		|| data.sem_print == SEM_FAILED)
 	{
 		printf("\033[31;1mError opening semaphores.\033[0m\n");
 		data.rules.error = 1;

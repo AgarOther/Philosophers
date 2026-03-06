@@ -18,7 +18,7 @@
 # define FINISHED_EATING "[%lld ms] Philo #%d has finished eating! 🍽️\n"
 # define IS_SLEEPING "[%lld ms] Philo #%d is sleeping! 💤\n"
 # define IS_THINKING "[%lld ms] Philo #%d is thinking! 💭\n"
-# define HAS_DIED "[%lld ms] Philo #%d died! 💀\n"
+# define DIED "[%lld ms] Philo #%d died! 💀\n"
 # define ALL_FULL "[%lld ms] All philosophers are full! 🫃\n"
 # include <stdio.h>
 # include <stdlib.h>

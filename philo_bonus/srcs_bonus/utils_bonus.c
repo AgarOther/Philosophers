@@ -12,21 +12,24 @@
 
 #include "philo_bonus.h"
 
+inline int	is_philo_done(t_philo *philo)
+{
+	return (philo->rules.meals_goal == philo->meals
+		&& philo->rules.meals_goal != -1);
+}
+
+int	is_philo_dead(t_philo *philo)
+{
+	if (philo->is_dead != 2)
+		philo->is_dead = time_passed(philo);
+	return (philo->is_dead);
+}
+
 int	philo_sleep(t_philo *philo, int ms)
 {
-	int	i;
-
-	i = 0;
-	while (i < ms)
-	{
-		if (ms - i >= 50)
-			usleep(50 * 1000);
-		else
-			usleep((ms - i) * 1000);
-		i += 50;
-		if (is_philo_dead(philo))
-			return (0);
-	}
+	usleep(ms * 1000);
+	if (is_philo_dead(philo))
+		return (0);
 	return (1);
 }
 
@@ -42,4 +45,3 @@ long long	get_time(void)
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
-

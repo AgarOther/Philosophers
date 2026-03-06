@@ -33,6 +33,10 @@ void	free_data(t_data *data)
 		sem_unlink("/forks");
 		sem_close(data->sem_print);
 		sem_unlink("/sem_print");
+		sem_close(data->sem_death);
+		sem_unlink("/sem_death");
+		sem_close(data->sem_end);
+		sem_unlink("/sem_end");
 	}
 	free(data->philos);
 	return ;

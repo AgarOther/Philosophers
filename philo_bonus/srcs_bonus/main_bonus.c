@@ -11,29 +11,57 @@
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <signal.h>
+#include <pthread.h>
 
-int	is_philo_done(t_philo *philo)
+static void	kill_philos(t_data *data)
 {
-	int	is_done;
+	int	i;
 
-	if (philo->rules.meals_goal == -1)
-		return (0);
-	// status lock
-	is_done = philo->rules.meals_goal == philo->meals;
-	// status unlock
-	return (is_done);
+	i = 0;
+	while (i < data->rules.philo_count)
+	{
+		kill(data->philos->pid, SIGKILL);
+		i++;
+	}
 }
 
-int	is_philo_dead(t_philo *philo)
+static void	*monitor(void *arg)
 {
-	int	is_dead;
+	t_data	*data;
+	int		i;
 
-	// status lock
-	if (philo->is_dead != 2)
-		philo->is_dead = time_passed(philo);
-	is_dead = philo->is_dead;
-	// status unlock
-	return (is_dead);
+	data = (t_data *)arg;
+	i = 0;
+	while (i < data->rules.philo_count)
+	{
+		sem_wait(data->sem_end);
+		i++;
+	}
+	kill_philos(data);
+	sem_post(data->sem_death);
+	return (NULL);
+}
+
+static void	philoop(t_data *data)
+{
+	pthread_t	monitor_thread;
+	int			i;
+
+	if (pthread_create(&monitor_thread, NULL, monitor, data))
+	{
+		kill_philos(data);
+		return ;
+	}
+	sem_wait(data->sem_death);
+	kill_philos(data);
+	i = 0;
+	while (i < data->rules.philo_count)
+	{
+		sem_post(data->sem_end);
+		i++;
+	}
+	pthread_join(monitor_thread, NULL);
 }
 
 int	main(int argc, char **argv)
@@ -57,6 +85,7 @@ int	main(int argc, char **argv)
 		free_data(&data);
 		return (1);
 	}
+	philoop(&data);
 	join_all(&data);
 	free_data(&data);
 }

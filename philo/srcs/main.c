@@ -58,7 +58,7 @@ void	philoop(t_data *data, int i, int j, int announce)
 	}
 	pthread_mutex_unlock(&data->print_lock);
 	if (announce)
-		print_message(&data->philos[announce - 1], HAS_DIED, 0);
+		print_message(&data->philos[announce - 1], DIED, 0);
 }
 
 int	main(int argc, char **argv)

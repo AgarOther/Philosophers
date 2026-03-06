@@ -18,7 +18,7 @@
 # define FINISHED_EATING "[%lld ms] Philo #%d has finished eating! 🍽️\n"
 # define IS_SLEEPING "[%lld ms] Philo #%d is sleeping! 💤\n"
 # define IS_THINKING "[%lld ms] Philo #%d is thinking! 💭\n"
-# define HAS_DIED "[%lld ms] Philo #%d died! 💀\n"
+# define DIED "[%lld ms] Philo #%d died! 💀\n"
 # define ALL_FULL "[%lld ms] Philo #%d is full! 🫃\n"
 # include <stdio.h>
 # include <stdlib.h>
@@ -50,6 +50,8 @@ typedef struct s_philo
 	pid_t			pid;
 	sem_t			*forks;
 	sem_t			*sem_print;
+	sem_t			*sem_death;
+	sem_t			*sem_end;
 }				t_philo;
 
 typedef struct s_data
@@ -58,7 +60,8 @@ typedef struct s_data
 	t_philo			*philos;
 	sem_t			*forks;
 	sem_t			*sem_print;
-	sem_t			*sem_status;
+	sem_t			*sem_death;
+	sem_t			*sem_end;
 }				t_data;
 
 typedef enum e_warning_reason
