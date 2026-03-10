@@ -76,7 +76,10 @@ int	main(int argc, char **argv)
 	}
 	data = get_data(argc, argv);
 	if (data.rules.error)
+	{
+		free_data(&data);
 		return (1);
+	}
 	i = 0;
 	get_philos(&data, &i);
 	if (!data.philos || i != data.rules.philo_count)

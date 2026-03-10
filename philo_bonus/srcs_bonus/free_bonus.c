@@ -25,19 +25,21 @@ void	join_all(t_data *data)
 	}
 }
 
+void	free_semaphore(sem_t *semaphore, const char *name)
+{
+	if (semaphore && semaphore != SEM_FAILED)
+	{
+		sem_close(semaphore);
+		sem_unlink(name);
+	}
+}
+
 void	free_data(t_data *data)
 {
-	if (data->philos)
-	{
-		sem_close(data->forks);
-		sem_unlink("/forks");
-		sem_close(data->sem_print);
-		sem_unlink("/sem_print");
-		sem_close(data->sem_death);
-		sem_unlink("/sem_death");
-		sem_close(data->sem_end);
-		sem_unlink("/sem_end");
-	}
+	free_semaphore(data->forks, "/forks");
+	free_semaphore(data->sem_print, "/sem_print");
+	free_semaphore(data->sem_death, "/sem_death");
+	free_semaphore(data->sem_end, "/sem_end");
 	free(data->philos);
 	return ;
 }

@@ -13,7 +13,7 @@
 #include "philo_bonus.h"
 #include <semaphore.h>
 
-static t_rules	get_rules(int argc, char **argv)
+static t_rules	get_rules(t_data *data, int argc, char **argv)
 {
 	t_rules	rules;
 
@@ -34,6 +34,11 @@ static t_rules	get_rules(int argc, char **argv)
 	}
 	else
 		rules.error = 0;
+	data->philos = NULL;
+	data->forks = SEM_FAILED;
+	data->sem_print = SEM_FAILED;
+	data->sem_death = SEM_FAILED;
+	data->sem_end = SEM_FAILED;
 	return (rules);
 }
 
@@ -67,7 +72,7 @@ t_data	get_data(int argc, char **argv)
 {
 	t_data	data;
 
-	data.rules = get_rules(argc, argv);
+	data.rules = get_rules(&data, argc, argv);
 	if (data.rules.error)
 		return (data);
 	sem_unlink("/forks");
@@ -80,7 +85,7 @@ t_data	get_data(int argc, char **argv)
 	sem_unlink("/sem_end");
 	data.sem_end = sem_open("/sem_end", O_CREAT | O_EXCL, O_RDWR, 0);
 	if (data.forks == SEM_FAILED || data.sem_print == SEM_FAILED
-		|| data.sem_print == SEM_FAILED)
+		|| data.sem_death == SEM_FAILED || data.sem_end == SEM_FAILED)
 	{
 		printf("\033[31;1mError opening semaphores.\033[0m\n");
 		data.rules.error = 1;
