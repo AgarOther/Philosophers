@@ -34,7 +34,9 @@ static int	unlock_forks(t_philo *philo)
 static int	philo_eats(t_philo *philo)
 {
 	sem_wait(philo->forks);
+	print_message(philo, TAKE_FORK, 1);
 	sem_wait(philo->forks);
+	print_message(philo, TAKE_FORK, 1);
 	print_message(philo, IS_EATING, 1);
 	if (!philo_sleep(philo, philo->rules.eat_time))
 		return (unlock_forks(philo));
@@ -62,7 +64,7 @@ void	routine(t_philo *philo)
 {
 	if (philo->rules.philo_count == 1)
 	{
-		print_message(philo, TAKE_LEFT_FORK, 0);
+		print_message(philo, TAKE_FORK, 0);
 		usleep(philo->rules.death_time * 1000);
 		printf(DIED, get_time() - philo->rules.start_time, philo->id);
 		sem_post(philo->sem_death);

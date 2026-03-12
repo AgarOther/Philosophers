@@ -12,8 +12,7 @@
 
 #ifndef PHILO_BONUS_H
 # define PHILO_BONUS_H
-# define TAKE_LEFT_FORK "[%lld ms] Philo #%d has taken their left fork! 🔱\n"
-# define TAKE_RIGHT_FORK "[%lld ms] Philo #%d has taken their right fork! 🔱\n"
+# define TAKE_FORK "[%lld ms] Philo #%d has taken a fork! 🔱\n"
 # define IS_EATING "[%lld ms] Philo #%d is eating! 🍝\n"
 # define FINISHED_EATING "[%lld ms] Philo #%d has finished eating! 🍽️\n"
 # define IS_SLEEPING "[%lld ms] Philo #%d is sleeping! 💤\n"
